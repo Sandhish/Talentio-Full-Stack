@@ -19,7 +19,7 @@ const Signup = () => {
             formData.email.includes('manager') ||
             formData.email.includes('employee')
         ) {
-            axios.post('/api/user/signup', formData)
+            axios.post('https://talentio-full-stack.onrender.com/api/user/signup', formData)
                 .then(res => {
                     console.log(res.data);
 
