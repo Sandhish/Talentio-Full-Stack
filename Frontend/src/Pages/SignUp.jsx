@@ -8,18 +8,35 @@ const Signup = () => {
         email: '',
         password: ''
     });
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const submitForm = (e) => {
         e.preventDefault();
-        axios.post('/api/user/signup', formData)
-            .then(res => {
-                console.log(res.data);
-                navigate('/home');
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        setError('');
+        if (
+            formData.email.includes('admin') ||
+            formData.email.includes('manager') ||
+            formData.email.includes('employee')
+        ) {
+            axios.post('/api/user/signup', formData)
+                .then(res => {
+                    console.log(res.data);
+
+                    if (formData.email.includes('admin')) {
+                        navigate('/admin');
+                    } else if (formData.email.includes('manager')) {
+                        navigate('/manager');
+                    } else if (formData.email.includes('employee')) {
+                        navigate('/employee');
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        } else {
+            setError('Invalid email address');
+        }
     };
 
     return (
@@ -49,6 +66,7 @@ const Signup = () => {
                     <button type="submit" className="w-32 mx-auto cursor-pointer border-2 mt-2 bg-blue-500 text-white text-[16px] font-semibold p-1.5 rounded-xl hover:bg-blue-600 hover:scale-105 transition-all duration-300 ease-in-out">
                         Sign Up
                     </button>
+                    {error && <p className="text-red-500 text-center">{error}</p>}
                 </form>
                 <p className="mt-2 text-center">
                     Already have an account?
